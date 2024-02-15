@@ -25,5 +25,6 @@ class RedisConfig {
         RedisTemplate<Any, Any>().apply{
             this.connectionFactory = redisConnectionFactory()
             this.keySerializer = StringRedisSerializer()
+            this.valueSerializer = StringRedisSerializer()
         }
 }
