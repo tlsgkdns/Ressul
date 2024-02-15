@@ -1,5 +1,6 @@
 package com.ressul.ressul.domain.member.model
 
+import com.ressul.ressul.domain.resume.model.ResumeEntity
 import com.ressul.ressul.global.entity.BaseEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
@@ -18,6 +19,9 @@ class MemberEntity(
 
     @Column(name = "name", nullable = false)
     var name: String,
+
+    @Column(name = "main_resume_id")
+    val mainResumeId: Long
 
 ) : BaseEntity() {
 
