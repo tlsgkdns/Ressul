@@ -1,5 +1,4 @@
-package com.ressul.ressul.infra
-
+package com.ressul.ressul.infra.swagger
 
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
@@ -15,7 +14,8 @@ class SwaggerConfig {
     @Bean
     fun openAPI(): OpenAPI = OpenAPI()
         .components(
-            Components().addSecuritySchemes(SECURITY_SCHEMA_NAME, SecurityScheme()
+            Components().addSecuritySchemes(
+                SECURITY_SCHEMA_NAME, SecurityScheme()
             .name(SECURITY_SCHEMA_NAME)
             .type(SecurityScheme.Type.HTTP)
             .scheme("bearer")
@@ -23,8 +23,8 @@ class SwaggerConfig {
         .addSecurityItem(SecurityRequirement().addList(SECURITY_SCHEMA_NAME))
         .info(
             Info()
-                .title("TODO API")
-                .description("This is TODO_APP Schema")
+                .title("Ressul")
+                .description("Welcome to Ressul Schema")
                 .version("1.0.0")
         )
 }
