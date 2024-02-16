@@ -15,6 +15,6 @@ class OAuth2LoginService(
     fun login(provider: OAuth2Provider, authorizationCode: String): String {
         return oAuth2ClientService.login(provider, authorizationCode)
             .let { memberService.registerIfAbsent(it) }
-            .let { jwtHelper.generateAccessToken(it.id!!.toString()) }
+            .let { jwtHelper.generateAccessToken(it.id!!.toString(), it.email) }
     }
 }
