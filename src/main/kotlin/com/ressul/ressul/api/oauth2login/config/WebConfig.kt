@@ -1,5 +1,6 @@
 package com.ressul.ressul.api.oauth2login.config
 
+import com.ressul.ressul.api.oauth2login.LoginMemberArgumentResolver
 import com.ressul.ressul.api.oauth2login.MyJwtTokenFilter
 import com.ressul.ressul.api.oauth2login.converter.OAuth2ProviderConverter
 import com.ressul.ressul.common.JwtHelper
@@ -8,6 +9,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.format.FormatterRegistry
+import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 
@@ -18,6 +20,10 @@ class WebConfig(
 
     override fun addFormatters(registry: FormatterRegistry) {
         registry.addConverter(OAuth2ProviderConverter())
+    }
+
+    override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver?>) {
+        resolvers.add(LoginMemberArgumentResolver())
     }
 
     @Bean

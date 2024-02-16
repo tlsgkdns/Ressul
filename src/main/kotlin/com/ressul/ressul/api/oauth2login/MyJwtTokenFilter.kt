@@ -2,7 +2,7 @@ package com.ressul.ressul.api.oauth2login
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ressul.ressul.common.JwtHelper
-import com.ressul.ressul.domain.member.dto.Member
+import com.ressul.ressul.domain.member.dto.LoginMember
 import com.ressul.ressul.global.exception.ErrorCode
 import com.ressul.ressul.global.exception.dto.ErrorResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -32,7 +32,6 @@ class MyJwtTokenFilter(
         val req = request as HttpServletRequest
         val res = response as HttpServletResponse
         logger.info { "요청 URL: ${request.requestURL}" }
-        logger.info { "response.status: ${response.status}" }
 
         if (isJwtCheckPath(request.requestURI)) {
             val jwt = request.getBearerToken()
@@ -42,9 +41,9 @@ class MyJwtTokenFilter(
                         val userId = it.payload.subject.toLong()
                         val email = it.payload.get("email", String::class.java)
 
-                        val member = Member(userId, email)
+                        val loginMember = LoginMember(userId, email)
 
-                        request.setAttribute("loginMember", member)
+                        request.setAttribute("loginMember", loginMember)
                     }
                     .onFailure {
                         val errorCode = ErrorCode.JWT_VERIFICATION_FAILED
