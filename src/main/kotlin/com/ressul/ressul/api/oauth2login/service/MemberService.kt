@@ -10,18 +10,17 @@ class MemberService(
     private val memberRepository: MemberRepository
 ) {
     fun registerIfAbsent(userInfo: OAuth2LoginUserInfo): MemberEntity {
-        return if (!memberRepository.existsByProviderAndProviderId(userInfo.provider, userInfo.id)) {
-            val member = MemberEntity(
-                email = userInfo.email,
-                provider = userInfo.provider,
-                providerId = userInfo.id,
-                nickname = userInfo.nickname,
-                profileImageUrl = userInfo.profileImageUrl,
-                thumbnailImageUrl = userInfo.thumbnailImageUrl,
-            )
-            memberRepository.save(member)
-        } else {
-            memberRepository.findByProviderAndProviderId(userInfo.provider, userInfo.id)
-        }
+        return memberRepository.findByProviderAndProviderId(userInfo.provider, userInfo.id)
+            ?: run {
+                val member = MemberEntity(
+                    email = userInfo.email,
+                    provider = userInfo.provider,
+                    providerId = userInfo.id,
+                    nickname = userInfo.nickname,
+                    profileImageUrl = userInfo.profileImageUrl,
+                    thumbnailImageUrl = userInfo.thumbnailImageUrl,
+                )
+                memberRepository.save(member)
+            }
     }
 }
