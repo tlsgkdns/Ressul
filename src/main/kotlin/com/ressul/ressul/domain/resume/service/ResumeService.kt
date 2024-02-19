@@ -1,6 +1,8 @@
 package com.ressul.ressul.domain.resume.service
 
+import com.ressul.ressul.domain.member.dto.LoginMember
 import com.ressul.ressul.domain.member.model.MemberEntity
+import com.ressul.ressul.domain.member.util.MemberUtil
 import com.ressul.ressul.domain.popularkeyword.service.PopularKeywordService
 import com.ressul.ressul.domain.resume.dto.CreateResumeRequest
 import com.ressul.ressul.domain.resume.dto.SearchResumeRequest
@@ -13,7 +15,8 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class ResumeService(
 	private val resumeRepository: IResumeRepository,
-	private val popularKeywordService: PopularKeywordService
+	private val popularKeywordService: PopularKeywordService,
+	private val memberUtil: MemberUtil
 ) {
 
 	private fun findById(id: Long) =
@@ -23,18 +26,27 @@ class ResumeService(
 		ResumeEntity.of(dto, memberEntity)
 			.let { resumeRepository.save(it) }.toResponse()
 
-	fun deleteResume(resumeId: Long) =
-		findById(resumeId)
-			.let { resumeRepository.delete(it) }
+	@Transactional
+	fun deleteResume(resumeId: Long, loginMember: LoginMember) =
+		findById(resumeId).let { entity ->
+			memberUtil.checkPermission(loginMember.id, entity.member) {
+				resumeRepository.delete(entity)
+			}
+		}
 
 	@Transactional
-	fun updateResume(resumeId: Long, dto: UpdateResumeRequest) =
-		findById(resumeId).also { entity ->
-			dto.introduction?.let { entity.introduction = it }
-			dto.certification?.let { entity.certification = it }
-			dto.education?.let { entity.education = it }
-		}.toResponse()
+	fun updateResume(resumeId: Long, dto: UpdateResumeRequest, loginMember: LoginMember) =
+		findById(resumeId).let { entity ->
+			memberUtil.checkPermission(loginMember.id, entity.member) {
+				dto.introduction?.let { entity.introduction = it }
+				dto.certification?.let { entity.certification = it }
+				dto.education?.let { entity.education = it }
+				entity.toResponse()
+			}
+		}
 
+
+	@Transactional
 	fun searchResumeList(dto: SearchResumeRequest, keyword: String): List<ResumeEntity> {
 		popularKeywordService.incrementKeywordCount(keyword)
 		return resumeRepository.searchBy(dto, keyword)
