@@ -12,8 +12,8 @@ import org.hibernate.annotations.SQLRestriction
 data class EventEntity(
     @Column(name = "tutor")
     val tutor:String,
-    @Column(name = "limit")
-    val limit: Int,
+    @Column(name = "capacity")
+    val capacity: Int,
     @Enumerated(EnumType.STRING)
     var type: EventStatus = EventStatus.PROCEEDING
 ): BaseEntity()
@@ -21,4 +21,14 @@ data class EventEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
+    @Column(name = "participantsCount")
+    var participantCount = 0
+    fun addParticipant(): Boolean
+    {
+        if(type == EventStatus.CLOSED) return false
+        ++participantCount
+        if(participantCount == capacity) type = EventStatus.CLOSED
+        return true
+    }
 }

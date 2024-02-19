@@ -8,5 +8,8 @@ enum class ErrorCode(val code: Long, val httpStatus: HttpStatus, val message: St
 	USERINFO_NOT_FOUND(1003, HttpStatus.BAD_REQUEST, "UserInfo 조회 실패입니다!"),
 	JWT_VERIFICATION_FAILED(1004, HttpStatus.BAD_REQUEST, "JWT verification failed"),
 
+	EVENT_NOT_FOUND(4001, HttpStatus.NOT_FOUND, "해당 Event가 없습니다."),
+	EVENT_IS_CLOSED(4002, HttpStatus.BAD_REQUEST, "해당 Event는 종료되었습니다."),
+
 	VALIDATION(10001, HttpStatus.BAD_REQUEST, "Validation을 통과하지 못했습니다."),
 }
