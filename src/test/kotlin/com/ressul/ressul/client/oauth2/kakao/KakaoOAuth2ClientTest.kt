@@ -1,9 +1,14 @@
 package com.ressul.ressul.client.oauth2.kakao
 
 import com.ressul.ressul.client.exception.OAuthException
+import com.ressul.ressul.client.oauth2.OAuth2Client
+import com.ressul.ressul.client.oauth2.OAuth2ClientService
+import com.ressul.ressul.common.type.OAuth2Provider
 import com.ressul.ressul.global.exception.ErrorCode
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
+import io.mockk.every
+import io.mockk.mockk
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.BeforeEach
@@ -78,5 +83,24 @@ class KakaoOAuth2ClientTest {
             it.errorCode.code shouldBe 1002
             it.message shouldBe "Kakao: AccessToken 조회 실패입니다!"
         }
+    }
+
+    @Test
+    fun `supports - 정상조회시 동작 확인`() {
+        // GIVEN
+        val client = KakaoOAuth2Client(
+            clientId = "CLIENT_ID",
+            redirectUrl = "http://localhost:8080/api/v1/oauth2/callback/kakao",
+            authServerBaseUrl = server.url("/").toString(),
+            resourceServerBaseUrl = server.url("/").toString(),
+            restClient = restClient
+        )
+        val kakaoOAuth2Provider = OAuth2Provider.KAKAO
+
+        // WHEN
+        val isKakao = client.supports(kakaoOAuth2Provider)
+
+        // THEN
+        isKakao shouldBe true
     }
 }
