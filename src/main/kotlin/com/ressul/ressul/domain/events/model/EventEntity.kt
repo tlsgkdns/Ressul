@@ -27,8 +27,7 @@ data class EventEntity(
     fun addParticipant(): Boolean
     {
         if(type == EventStatus.CLOSED) return false
-        ++participantCount
-        if(participantCount == capacity) type = EventStatus.CLOSED
+        if(++participantCount == capacity) type = EventStatus.CLOSED
         return true
     }
 }
