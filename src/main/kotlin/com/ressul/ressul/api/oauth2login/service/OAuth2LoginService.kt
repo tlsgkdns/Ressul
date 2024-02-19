@@ -3,7 +3,6 @@ package com.ressul.ressul.api.oauth2login.service
 import com.ressul.ressul.client.oauth2.OAuth2ClientService
 import com.ressul.ressul.common.JwtHelper
 import com.ressul.ressul.common.type.OAuth2Provider
-import com.ressul.ressul.domain.member.service.MemberService
 import org.springframework.stereotype.Service
 
 @Service

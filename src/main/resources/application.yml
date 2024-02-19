@@ -6,6 +6,18 @@ spring:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
+#  config:
+#    activate:
+#      on-profile: local
+#  datasource:
+#    url: jdbc:h2:mem:test;MODE=MySQL;
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+#  data:
+#    redis:
+#      host: 127.0.0.1
+#      port: 6379
   jpa:
     properties:
       hibernate:
@@ -33,3 +45,9 @@ oauth2:
   kakao:
     client_id: ${OAUTH_KAKAO_CLIENT_ID}
     redirect_url: ${OAUTH_KAKAO_REDIRECT_URL}
+    auth_server_base_url: ${OAUTH_KAKAO_AUTH_SERVER_BASE_URL}
+    resource_server_base_url: ${OAUTH_KAKAO_RESOURCE_SERVER_BASE_URL}
+#  naver:
+#    client_id: "Gdytgr_ylEEQDyuCEqjS"
+#    client_secret: "****{"
+#    redirect_url: "http://localhost:8080/api/v1/oauth2/callback/naver"

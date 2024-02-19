@@ -1,4 +1,4 @@
-package com.ressul.ressul.domain.member.service
+package com.ressul.ressul.api.oauth2login.service
 
 import com.ressul.ressul.client.oauth2.OAuth2LoginUserInfo
 import com.ressul.ressul.domain.member.model.MemberEntity
