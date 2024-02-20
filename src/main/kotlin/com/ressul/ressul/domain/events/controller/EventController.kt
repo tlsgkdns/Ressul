@@ -29,7 +29,7 @@ class EventController(
             .body(eventService.getEvent(eventId))
     }
 
-    @PostMapping("{eventId}")
+    @PostMapping("/{eventId}")
     fun participateEvent(@PathVariable eventId: Long, @Login loginMember: LoginMember): ResponseEntity<ParticipantsResponse>
     {
         return ResponseEntity.status(HttpStatus.OK)
@@ -43,7 +43,7 @@ class EventController(
             .body(eventService.createEvent(eventCreateDTO))
     }
 
-    @DeleteMapping("{eventId}")
+    @DeleteMapping("/{eventId}")
     fun deleteEvent(@PathVariable eventId: Long): ResponseEntity<UInt>
     {
         eventService.deleteEvent(eventId)
