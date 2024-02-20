@@ -8,13 +8,17 @@ import java.time.Duration
 class RedisLockRepository(
     private val redisTemplate: RedisTemplate<String, String>
 ) {
-    fun lock(key:Long) : Boolean?
+    private fun makeKey(name: String, id: Long): String
+    {
+        return name + "_" + id.toString()
+    }
+    fun lock(name: String, id:Long) : Boolean?
     {
         return redisTemplate.opsForValue()
-            .setIfAbsent(key.toString(), "lock", Duration.ofMillis(3_000))
+            .setIfAbsent(makeKey(name, id), "lock", Duration.ofMillis(3_000))
     }
-    fun unlock(key: Long): Boolean
+    fun unlock(name: String, id: Long): Boolean
     {
-        return redisTemplate.delete(key.toString())
+        return redisTemplate.delete(makeKey(name, id))
     }
 }

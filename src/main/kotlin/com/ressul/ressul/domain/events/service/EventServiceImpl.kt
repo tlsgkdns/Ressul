@@ -40,7 +40,7 @@ class EventServiceImpl(
 
     @Transactional
     override fun participateEvent(eventId: Long, loginMember: LoginMember): ParticipantsResponse {
-        while (redisLockRepository.lock(eventId) == true)
+        while (redisLockRepository.lock("Event", eventId) == true)
         {
             Thread.sleep(100)
         }
@@ -51,7 +51,7 @@ class EventServiceImpl(
             return participantRepository.save(Participant(member = memberRepository.findByIdOrNull(loginMember.id), event = event))
                 .let { ParticipantsResponse.from(it) }
         } finally {
-            redisLockRepository.unlock(eventId)
+            redisLockRepository.unlock("Event", eventId)
         }
     }
 
