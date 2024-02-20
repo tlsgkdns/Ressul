@@ -20,5 +20,5 @@ class PopularKeywordService(
 		findByKeyword(keyword).let { it.count++ }
 
 	fun getPopularKeywordList() =
-		popularKeywordRepository.findTop10ByOrderByCountDesc()
+		popularKeywordRepository.findTop10ByOrderByCountDesc().map { it.toResponse() }
 }

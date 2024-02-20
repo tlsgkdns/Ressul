@@ -3,7 +3,6 @@ package com.ressul.ressul.domain.resume.service
 import com.ressul.ressul.domain.member.dto.LoginMember
 import com.ressul.ressul.domain.member.model.MemberEntity
 import com.ressul.ressul.domain.member.util.MemberUtil
-import com.ressul.ressul.domain.popularkeyword.service.PopularKeywordService
 import com.ressul.ressul.domain.resume.dto.CreateResumeRequest
 import com.ressul.ressul.domain.resume.dto.SearchResumeRequest
 import com.ressul.ressul.domain.resume.dto.UpdateResumeRequest
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class ResumeService(
 	private val resumeRepository: IResumeRepository,
-	private val popularKeywordService: PopularKeywordService,
 	private val memberUtil: MemberUtil
 ) {
 
@@ -45,12 +43,9 @@ class ResumeService(
 			}
 		}
 
-
 	@Transactional
-	fun searchResumeList(dto: SearchResumeRequest, keyword: String): List<ResumeEntity> {
-		popularKeywordService.incrementKeywordCount(keyword)
-		return resumeRepository.searchBy(dto, keyword)
-	}
+	fun searchResumeList(dto: SearchResumeRequest, keyword: String, page: Int) =
+		resumeRepository.searchBy(dto, keyword, page, size = 10).map { it.toResponse() }
 
 	fun getResumeById(resumeId: Long) =
 		findById(resumeId).toResponse()

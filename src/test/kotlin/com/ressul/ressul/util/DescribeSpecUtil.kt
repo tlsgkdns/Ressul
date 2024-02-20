@@ -4,6 +4,8 @@ import io.kotest.core.spec.style.scopes.DescribeSpecContainerScope
 import io.kotest.core.test.TestScope
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 
+typealias BeforeTest = () -> Unit
+
 suspend fun DescribeSpecContainerScope.flushIt(
 	name: String,
 	em: TestEntityManager,
@@ -16,5 +18,3 @@ suspend fun DescribeSpecContainerScope.flushIt(
 		em.flush()
 	}
 }
-
-typealias BeforeTest = () -> Unit

@@ -1,5 +1,6 @@
 package com.ressul.ressul.domain.popularkeyword.model
 
+import com.ressul.ressul.domain.popularkeyword.dto.PopularKeywordDTO
 import com.ressul.ressul.global.entity.BaseTimeEntity
 import jakarta.persistence.*
 
@@ -8,6 +9,9 @@ import jakarta.persistence.*
 class PopularKeywordEntity(
 	val keyword: String,
 ) : BaseTimeEntity() {
+	fun toResponse() =
+		PopularKeywordDTO(keyword, count)
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	val id: Long? = null

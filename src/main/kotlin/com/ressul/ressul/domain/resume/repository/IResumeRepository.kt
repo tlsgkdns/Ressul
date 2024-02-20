@@ -7,6 +7,6 @@ interface IResumeRepository {
 	fun findByIdOrNull(id: Long): ResumeEntity?
 	fun save(entity: ResumeEntity): ResumeEntity
 	fun delete(entity: ResumeEntity)
-	fun searchBy(dto: SearchResumeRequest, keyword: String): List<ResumeEntity>
+	fun searchBy(dto: SearchResumeRequest, keyword: String, page: Int, size: Int): List<ResumeEntity>
 	fun findAllById(idList: List<Long>): List<ResumeEntity>
 }

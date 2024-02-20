@@ -45,7 +45,7 @@ class ResumeEntity(
 	fun toResponse() =
 		ResumeResponse(
 			id = id!!,
-			nickname = member.name,
+			nickname = member.nickname,
 			certification = certification,
 			education = education,
 			views = views,

@@ -3,11 +3,11 @@ package com.ressul.ressul.resume.repository
 import com.ressul.ressul.domain.member.model.MemberEntity
 import com.ressul.ressul.domain.resume.model.ResumeEntity
 import com.ressul.ressul.global.entity.BaseTimeEntity
+import com.ressul.ressul.util.BeforeTest
 import com.ressul.ressul.util.flushIt
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.shouldBe
-import jakarta.transaction.Transactional
 import org.apache.commons.lang3.RandomStringUtils
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -27,7 +27,6 @@ interface TestJpaResumeRepository : JpaRepository<ResumeEntity, Long>
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ComponentScan(basePackageClasses = [BaseTimeEntity::class])
-@EnableJpaAuditing
 class ResumeRepositoryTest(
 	private val resumeRepository: TestJpaResumeRepository,
 	private val entityManager: TestEntityManager
@@ -42,6 +41,7 @@ class ResumeRepositoryTest(
 		context("정렬을 시키고") {
 			idList.sort()
 			val foundList = resumeRepository.findAllById(idList)
+
 
 			flushIt("해당하는 id 들의 조회수를 증가시킨다.", entityManager) {
 				foundList.run {
@@ -73,9 +73,12 @@ class ResumeRepositoryTest(
 				val em = entityManager.entityManager
 				val entity = em.createQuery(
 					"select r from ResumeEntity r" +
-							" where r.certification like CONCAT('%', :cretifi ,'%') " +
-							" and r.introduction like CONCAT('%', :intro ,'%') " +
-							"and r.id > 5390000",
+							" where r.id > 5390000" +
+							" and r.certification like CONCAT('%', :cretifi ,'%')" +
+							" union " +
+							"select r from ResumeEntity r" +
+							" where r.id > 5390000" +
+							" and r.introduction like CONCAT('%', :intro , '%')",
 					ResumeEntity::class.java
 				)
 					.setParameter("cretifi", cretifi)
@@ -84,9 +87,30 @@ class ResumeRepositoryTest(
 
 				takeIf { entity.size > 0 }
 					?.let {
-						entity[0].certification.lowercase().contains(cretifi) shouldBe true
-						entity[0].introduction.lowercase().contains(intro) shouldBe true
+						(entity[0].certification.lowercase().contains(cretifi) || entity[0].introduction.lowercase()
+							.contains(intro)) shouldBe true
 					}
+			}
+
+			flushIt("oder by id desc limit", entityManager){ // NOTE: union과 성능은 엇비슷 하지만, queryDsl로 만들기 수월하며, 테이블 행 숫자를 업데이트 시켜줘야 하는 로직이 사라진다.
+				val entity = entityManager.entityManager.createQuery(
+					"select r from ResumeEntity r" +
+							" where r.introduction like concat('%', 'a', '%') " +
+							" and r.certification like concat('%', 'b', '%')" +
+							" order by id desc limit 10000",
+				).resultList
+			}
+
+			flushIt("union", entityManager){
+				val entity = entityManager.entityManager.createQuery(
+					"select r from ResumeEntity r" +
+							" where r.id > 5390000" +
+							" and r.certification like CONCAT('%', 'a' ,'%')" +
+							" union " +
+							"select r from ResumeEntity r" +
+							" where r.id > 5390000" +
+							" and r.introduction like CONCAT('%', 'b' , '%')",
+				).resultList
 			}
 		}
 	}
