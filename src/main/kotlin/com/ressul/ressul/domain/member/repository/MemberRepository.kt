@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface MemberRepository : CrudRepository<MemberEntity, Long> {
-    fun existsByProviderAndProviderId(provider: OAuth2Provider, toString: String): Boolean
-    fun findByProviderAndProviderId(provider: OAuth2Provider, toString: String): MemberEntity
+    fun findByProviderAndProviderId(provider: OAuth2Provider, toString: String): MemberEntity?
 }

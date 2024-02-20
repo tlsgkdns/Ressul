@@ -1,13 +1,10 @@
 package com.ressul.ressul.domain.member.model
 
 import com.ressul.ressul.common.type.OAuth2Provider
-import com.ressul.ressul.domain.resume.model.ResumeEntity
 import com.ressul.ressul.global.entity.BaseEntity
-import com.ressul.ressul.global.entity.BaseTimeEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.SQLRestriction
-import org.hibernate.annotations.SoftDelete
 
 @Entity
 @Table(name = "members")
@@ -35,9 +32,14 @@ class MemberEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
+    val id: Long? = null
 
     @Column(name = "main_resume_id")
-    val mainResumeId: Long? = null
+    var mainResumeId: Long? = null
+
+    fun update(nickname: String, mainResumeId: Long) {
+        this.nickname = nickname
+        this.mainResumeId = mainResumeId
+    }
 
 }

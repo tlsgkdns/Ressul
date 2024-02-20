@@ -9,4 +9,5 @@ enum class ErrorCode(val code: Long, val httpStatus: HttpStatus, val message: St
 	JWT_VERIFICATION_FAILED(1004, HttpStatus.BAD_REQUEST, "JWT verification failed"),
 
 	VALIDATION(10001, HttpStatus.BAD_REQUEST, "Validation을 통과하지 못했습니다."),
+	MODEL_NOT_FOUND(10002, HttpStatus.BAD_REQUEST, "해당 Model을 찾지 못했습니다."),
 }
