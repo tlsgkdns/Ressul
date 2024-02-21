@@ -40,7 +40,7 @@ class EventServiceImpl(
 
     @Transactional
     override fun participateEvent(eventId: Long, loginMember: LoginMember): ParticipantsResponse {
-        while (redisLockRepository.lock("Event", eventId) == true)
+        while (!redisLockRepository.lock("Event", eventId))
         {
             Thread.sleep(100)
         }

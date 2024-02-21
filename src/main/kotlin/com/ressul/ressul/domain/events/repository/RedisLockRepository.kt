@@ -12,10 +12,10 @@ class RedisLockRepository(
     {
         return name + "_" + id.toString()
     }
-    fun lock(name: String, id:Long) : Boolean?
+    fun lock(name: String, id:Long) : Boolean
     {
         return redisTemplate.opsForValue()
-            .setIfAbsent(makeKey(name, id), "lock", Duration.ofMillis(3_000))
+            .setIfAbsent(makeKey(name, id), "lock", Duration.ofMillis(3_000)) ?: false
     }
     fun unlock(name: String, id: Long): Boolean
     {
