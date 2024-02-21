@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@RequestMapping("/api/v2/resumes")
 class ResumeControllerV2(
 	private val resumeApiServiceV2: ResumeApiServiceV2
 ) {
@@ -39,7 +40,7 @@ class ResumeControllerV2(
 		resumeApiServiceV2.deleteResume(id, loginMember)
 	}
 
-	@GetMapping("/search/{keyword}/{page}")
+	@PostMapping("/search/{keyword}/{page}")
 	fun searchResume(@RequestBody dto: SearchResumeRequest, @PathVariable keyword: String, @PathVariable page: Int) = responseEntity(
 		HttpStatus.OK) {
 		resumeApiServiceV2.searchResume(dto, keyword, page)
