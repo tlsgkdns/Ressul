@@ -22,7 +22,7 @@ class ResumeService(
 	private fun findById(id: Long) =
 		resumeRepository.findByIdOrNull(id) ?: throw ModelNotFoundException(
 			"해당 이력서를 찾지 못하였습니다.",
-			ErrorCode.MODELNOTFOUND
+			ErrorCode.MODEL_NOT_FOUND
 		)
 
 	fun createResume(dto: CreateResumeRequest, memberEntity: MemberEntity) =

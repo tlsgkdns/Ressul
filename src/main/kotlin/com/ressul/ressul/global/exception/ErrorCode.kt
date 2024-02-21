@@ -10,5 +10,4 @@ enum class ErrorCode(val code: Long, val httpStatus: HttpStatus, val message: St
 	MEMBER_MISMATCH_AUTHOR(1005, HttpStatus.FORBIDDEN, "작성자가 아닙니다."),
 
 	VALIDATION(10001, HttpStatus.BAD_REQUEST, "Validation을 통과하지 못했습니다."),
-	MODELNOTFOUND(10002, HttpStatus.NOT_FOUND, "Model을 찾지 못하였습니다.")
 }
