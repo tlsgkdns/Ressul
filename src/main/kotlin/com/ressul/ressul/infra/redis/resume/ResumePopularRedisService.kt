@@ -66,18 +66,20 @@ open class ResumePopularRedisService(
 							?: this
 					}
 					.run { map { it.first } }
-					.also { redisLongTemplate.opsForList().rightPushAll(popularResumeKey, it) }
+					.also { if (it.isNotEmpty()) redisLongTemplate.opsForList().rightPushAll(popularResumeKey, it) }
 			}
 			.run { updateViewsWith(this) }
 	}
 
 	private fun updateViewsWith(recentlyViews: Map<Long, Long>) {
 		val updatedViews = getUpdatedViews()
-		recentlyViews.run { // NOTE : 이미 처리가 끝난 조회수를 뺀 이후 최종적으로 업데이트 시킨다.
-			keys.map { it }
-				.let { resumeRepository.findAllById(it) }
-				.onEach { it.views += this[it.id!!]?.minus(updatedViews[it.id!!]!!)!! }
-				.let { resumeRepository.saveAllAndFlush(it) }
+		recentlyViews.run {// NOTE : 이미 처리가 끝난 조회수를 뺀 이후 최종적으로 업데이트 시킨다.
+			if (this.isNotEmpty()) {
+				keys.map { it }
+					.let { resumeRepository.findAllById(it) }
+					.onEach { it.views += this[it.id!!]?.minus(updatedViews[it.id!!]!!)!! }
+					.let { resumeRepository.saveAllAndFlush(it) }
+			}
 		}
 	}
 
