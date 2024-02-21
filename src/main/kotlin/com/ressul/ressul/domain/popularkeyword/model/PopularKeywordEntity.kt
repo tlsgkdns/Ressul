@@ -7,6 +7,7 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "popularkeyword")
 class PopularKeywordEntity(
+	@Column(unique = true, nullable = false)
 	val keyword: String,
 ) : BaseTimeEntity() {
 	fun toResponse() =
