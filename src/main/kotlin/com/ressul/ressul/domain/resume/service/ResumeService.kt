@@ -8,8 +8,10 @@ import com.ressul.ressul.domain.resume.dto.SearchResumeRequest
 import com.ressul.ressul.domain.resume.dto.UpdateResumeRequest
 import com.ressul.ressul.domain.resume.model.ResumeEntity
 import com.ressul.ressul.domain.resume.repository.IResumeRepository
+import com.ressul.ressul.global.exception.ErrorCode
+import com.ressul.ressul.global.exception.ModelNotFoundException
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ResumeService(
@@ -18,7 +20,10 @@ class ResumeService(
 ) {
 
 	private fun findById(id: Long) =
-		resumeRepository.findByIdOrNull(id) ?: throw TODO("못찾음")
+		resumeRepository.findByIdOrNull(id) ?: throw ModelNotFoundException(
+			"해당 이력서를 찾지 못하였습니다.",
+			ErrorCode.MODEL_NOT_FOUND
+		)
 
 	fun createResume(dto: CreateResumeRequest, memberEntity: MemberEntity) =
 		ResumeEntity.of(dto, memberEntity)
@@ -47,6 +52,7 @@ class ResumeService(
 	fun searchResumeList(dto: SearchResumeRequest, keyword: String, page: Int) =
 		resumeRepository.searchBy(dto, keyword, page, size = 10).map { it.toResponse() }
 
+	@Transactional
 	fun getResumeById(resumeId: Long) =
 		findById(resumeId).toResponse()
 

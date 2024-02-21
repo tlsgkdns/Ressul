@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository
 interface PopularKeywordRepository : CrudRepository<PopularKeywordEntity, Long> {
 	fun findByKeyword(keyword: String): PopularKeywordEntity?
 
-	fun findTop10ByOrderByCountDesc(): List<PopularKeywordEntity>;
+	fun findTop10ByOrderByCountDesc(): List<PopularKeywordEntity>
 }

@@ -1,5 +1,8 @@
 package com.ressul.ressul.infra.redis.popularkeyword
 
+import org.springframework.stereotype.Service
+
+@Service
 class PopularKeywordRedisCacheService(
 	private val popularKeywordRedisRepository: PopularKeywordRedisRepository,
 ) {

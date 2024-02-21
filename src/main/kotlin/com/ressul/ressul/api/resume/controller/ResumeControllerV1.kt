@@ -40,7 +40,7 @@ class ResumeControllerV1(
 		resumeApiServiceV1.deleteResume(id, loginMember)
 	}
 
-	@GetMapping("/search/{keyword}/{page}")
+	@PostMapping("/search/{keyword}/{page}")
 	fun searchResume(@RequestBody dto: SearchResumeRequest, @PathVariable keyword: String, @PathVariable page: Int) = responseEntity(HttpStatus.OK) {
 		resumeApiServiceV1.searchResume(dto, keyword, page)
 	}
