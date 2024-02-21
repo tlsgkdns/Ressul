@@ -6,22 +6,22 @@ import com.ressul.ressul.domain.resume.dto.CreateResumeRequest
 import com.ressul.ressul.domain.resume.dto.SearchResumeRequest
 import com.ressul.ressul.domain.resume.dto.UpdateResumeRequest
 import com.ressul.ressul.domain.resume.service.ResumeService
-import com.ressul.ressul.infra.redis.resume.ResumeRedisService
+import com.ressul.ressul.infra.redis.resume.ResumePopularRedisService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
 class ResumeApiServiceV1(
 	private val resumeService: ResumeService,
-	private val resumeRedisService: ResumeRedisService,
+	private val resumePopularRedisService: ResumePopularRedisService,
 	private val memberRepository: MemberRepository
 ) {
 	fun getResumeById(resumeId: Long) =
 		resumeService.getResumeById(resumeId)
-			.also { resumeRedisService.addView(it.id); }
+			.also { resumePopularRedisService.addView(it.id); }
 
 	fun getPopularResume() =
-		resumeRedisService.getPopularResume()
+		resumePopularRedisService.getPopularResume()
 			.let { resumeService.getResumeListByIdList(it) }
 
 	fun searchResume(dto: SearchResumeRequest, keyword: String, page: Int): List<Any> =
