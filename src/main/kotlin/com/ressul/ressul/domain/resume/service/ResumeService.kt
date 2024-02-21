@@ -8,8 +8,8 @@ import com.ressul.ressul.domain.resume.dto.SearchResumeRequest
 import com.ressul.ressul.domain.resume.dto.UpdateResumeRequest
 import com.ressul.ressul.domain.resume.model.ResumeEntity
 import com.ressul.ressul.domain.resume.repository.IResumeRepository
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ResumeService(
@@ -47,6 +47,7 @@ class ResumeService(
 	fun searchResumeList(dto: SearchResumeRequest, keyword: String, page: Int) =
 		resumeRepository.searchBy(dto, keyword, page, size = 10).map { it.toResponse() }
 
+	@Transactional
 	fun getResumeById(resumeId: Long) =
 		findById(resumeId).toResponse()
 
