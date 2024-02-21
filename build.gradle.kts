@@ -77,6 +77,8 @@ dependencies {
 
     testImplementation("com.ninja-squad:springmockk:4.0.2")
     implementation("me.paulschwarz:spring-dotenv:4.0.0")
+
+    testImplementation("org.apache.commons:commons-lang3:3.14.0")
 }
 
 tasks.withType<KotlinCompile> {
