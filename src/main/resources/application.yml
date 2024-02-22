@@ -1,11 +1,4 @@
 spring:
-  profiles:
-    active: dev
----
-spring:
-  config:
-    activate:
-      on-profile: dev
   redis:
     host: ${SPRING_REDIS_HOST}
     port: ${SPRING_REDIS_PORT}
@@ -23,6 +16,10 @@ spring:
     hibernate:
       ddl-auto: update
     open-in-view: false
+  data:
+    redis:
+      host: ${SPRING_REDIS_HOST}
+      port: ${SPRING_REDIS_PORT}
 logging:
   level:
     org:

@@ -7,14 +7,17 @@ import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories
 import org.springframework.data.redis.serializer.StringRedisSerializer
 
 @Configuration
+@EnableRedisRepositories
 class RedisConfig {
-    @Value("\${spring.redis.host}")
+    @Value("\${spring.data.redis.host}")
     lateinit var host: String
-    @Value("\${spring.redis.port}")
+    @Value("\${spring.data.redis.port}")
     var port: Int = 0
+
     @Bean
     fun redisConnectionFactory(): RedisConnectionFactory = LettuceConnectionFactory(
         RedisStandaloneConfiguration(host, port)
