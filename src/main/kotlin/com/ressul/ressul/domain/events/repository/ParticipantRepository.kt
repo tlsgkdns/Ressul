@@ -6,3 +6,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ParticipantRepository : JpaRepository<Participant, Long>
+{
+    fun existsParticipantByEventIdAndMemberId(eventId: Long, memberId: Long): Boolean
+}

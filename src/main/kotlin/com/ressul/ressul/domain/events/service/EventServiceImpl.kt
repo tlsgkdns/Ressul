@@ -3,6 +3,7 @@ package com.ressul.ressul.domain.events.service
 import com.ressul.ressul.domain.events.dto.EventCreateRequest
 import com.ressul.ressul.domain.events.dto.EventResponse
 import com.ressul.ressul.domain.events.dto.ParticipantsResponse
+import com.ressul.ressul.domain.events.exception.AlreadyParticipatedEvent
 import com.ressul.ressul.domain.events.exception.EventIsClosedException
 import com.ressul.ressul.domain.events.model.EventEntity
 import com.ressul.ressul.domain.events.model.Participant
@@ -15,7 +16,6 @@ import com.ressul.ressul.global.exception.ErrorCode
 import com.ressul.ressul.global.exception.ModelNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 
 @Service
@@ -45,6 +45,8 @@ class EventServiceImpl(
         }
         try {
             val event = getExistEvent(eventId)
+            if(participantRepository.existsParticipantByEventIdAndMemberId(eventId, loginMember.id))
+                throw AlreadyParticipatedEvent(ErrorCode.ALREADY_PARTICIPATED_EVENT)
             if(!event.addParticipant()) throw EventIsClosedException(ErrorCode.EVENT_IS_CLOSED)
             eventRepository.save(event)
             return participantRepository.save(Participant(member = memberRepository.findByIdOrNull(loginMember.id), event = event))

@@ -1,6 +1,7 @@
 package com.ressul.ressul.event
 
 import com.ressul.ressul.common.type.OAuth2Provider
+import com.ressul.ressul.domain.events.exception.AlreadyParticipatedEvent
 import com.ressul.ressul.domain.events.exception.EventIsClosedException
 import com.ressul.ressul.domain.events.model.EventEntity
 import com.ressul.ressul.domain.events.repository.EventRepository
@@ -41,23 +42,12 @@ class RessulEventServiceTests @Autowired constructor(
                 it("정확한 인원이 참여한다.")
                 {
                     val threadCount = 100
-                    repeat(threadCount)
-                    {
-                        memberRepository.save(MemberEntity(
-                            Random.nextInt().toString(),
-                            Random.nextInt().toString(),
-                            Random.nextInt().toString(),
-                            Random.nextInt().toString(),
-                            OAuth2Provider.KAKAO,
-                            Random.nextInt().toString()
-                        ))
-                    }
+                    addRandomMember(memberRepository, threadCount)
                     val eventService = EventServiceImpl(eventRepository = eventRepository, memberRepository = memberRepository,
                         redisLockRepository = redisLockRepository, participantRepository = participantRepository)
                     val eventId = eventRepository.save(EventEntity("This is tutor", 100)).id!!
                     val executorService = Executors.newFixedThreadPool(20)
                     val countDownLatch = CountDownLatch(threadCount)
-
                     repeat(threadCount)
                     {
                         executorService.submit{
@@ -81,17 +71,7 @@ class RessulEventServiceTests @Autowired constructor(
                 it("EventIsClosedException이 발생한다.")
                 {
                     val participantsCount = 3;
-                    repeat(participantsCount)
-                    {
-                        memberRepository.save(MemberEntity(
-                            Random.nextInt().toString(),
-                            Random.nextInt().toString(),
-                            Random.nextInt().toString(),
-                            Random.nextInt().toString(),
-                            OAuth2Provider.KAKAO,
-                            Random.nextInt().toString()
-                        ))
-                    }
+                    addRandomMember(memberRepository, participantsCount)
                     val eventService = EventServiceImpl(eventRepository = eventRepository, memberRepository = memberRepository,
                         redisLockRepository = redisLockRepository, participantRepository = participantRepository)
                     val eventId = eventRepository.save(EventEntity("This is tutor", participantsCount)).id!!
@@ -108,7 +88,38 @@ class RessulEventServiceTests @Autowired constructor(
                 }
             }
         }
-
+        describe("이벤트에 참여할 때")
+        {
+            context("이미 참여한 이벤트라면")
+            {
+                it("Already Participated Event Exception이 발생한다.")
+                {
+                    addRandomMember(memberRepository, 1)
+                    val eventService = EventServiceImpl(eventRepository = eventRepository, memberRepository = memberRepository,
+                        redisLockRepository = redisLockRepository, participantRepository = participantRepository)
+                    val eventId = eventRepository.save(EventEntity("This is tutor", 100)).id!!
+                    eventService.participateEvent(eventId, LoginMember(1L, "aaa"))
+                    shouldThrow<AlreadyParticipatedEvent> {
+                        eventService.participateEvent(eventId, LoginMember(1L, "aaa"))
+                    }
+                }
+            }
+        }
 
     }
+
 )
+fun addRandomMember(memberRepository: MemberRepository, memberCount: Int)
+{
+    repeat(memberCount)
+    {
+        memberRepository.save(MemberEntity(
+            Random.nextInt().toString(),
+            Random.nextInt().toString(),
+            Random.nextInt().toString(),
+            Random.nextInt().toString(),
+            OAuth2Provider.KAKAO,
+            Random.nextInt().toString()
+        ))
+    }
+}
