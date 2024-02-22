@@ -18,7 +18,7 @@ class MyJwtTokenFilter(
     companion object {
         private val BEARER_PATTERN = Regex("^Bearer (.+?)$")
         private val whitelist = arrayOf(
-            "/api/v1/oauth2/login/kakao", "/api/v1/oauth2/callback/kakao"
+            "/api/v1/oauth2/login/kakao", "/api/v1/oauth2/callback/kakao", "/api/v1/test/*", "/api/v1/resumes/search/*", "/api/v2/resumes/search/*", "/api/v3/resumes/search/*"
         )
     }
 
