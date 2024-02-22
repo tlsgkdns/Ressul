@@ -31,7 +31,6 @@ logging:
         orm:
           jdbc:
             bind: trace
-    root: info
 
 auth:
   jwt:
