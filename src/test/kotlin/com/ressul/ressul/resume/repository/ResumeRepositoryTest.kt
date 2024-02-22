@@ -57,7 +57,6 @@ class ResumeRepositoryTest(
 					this[0].views += 100
 					resumeRepository.saveAll(this)
 
-
 					this[0].views shouldBe resumeRepository.findByIdOrNull(1)!!.views
 				}
 			}
@@ -97,7 +96,7 @@ class ResumeRepositoryTest(
 					"select r from ResumeEntity r" +
 							" where r.introduction like concat('%', 'a', '%') " +
 							" and r.certification like concat('%', 'b', '%')" +
-							" order by id desc limit 10000",
+							" order by id desc limit 10",
 				).resultList
 			}
 

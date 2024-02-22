@@ -49,6 +49,7 @@ class ResumeEntity(
 			certification = certification,
 			education = education,
 			views = views,
-			title = title
+			title = title,
+			introduction = introduction
 		)
 }

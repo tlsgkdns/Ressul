@@ -8,6 +8,5 @@ import org.springframework.data.redis.core.index.Indexed
 data class PopularKeywordRedisModel(
 	@Id
 	val keyword: String,
-	val page: Int,
-	val dataIdList: List<Long>
+	val dataIdList: String
 )

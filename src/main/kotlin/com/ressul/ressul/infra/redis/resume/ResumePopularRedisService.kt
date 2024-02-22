@@ -73,13 +73,13 @@ open class ResumePopularRedisService(
 
 	private fun updateViewsWith(recentlyViews: Map<Long, Long>) {
 		val updatedViews = getUpdatedViews()
-		recentlyViews.run {// NOTE : 이미 처리가 끝난 조회수를 뺀 이후 최종적으로 업데이트 시킨다.
-			if (this.isNotEmpty()) {
-				keys.map { it }
-					.let { resumeRepository.findAllById(it) }
-					.onEach { it.views += this[it.id!!]?.minus(updatedViews[it.id!!]!!)!! }
-					.let { resumeRepository.saveAllAndFlush(it) }
-			}
+		if (recentlyViews.isNotEmpty()) {
+			recentlyViews.keys.map { it }
+				.let { resumeRepository.findAllById(it) }
+				.run {
+					takeIf { updatedViews.isNotEmpty() }
+						?.run { onEach { it.views += recentlyViews[it.id!!]?.minus(updatedViews[it.id!!]!!)!! } }
+				}?.let { resumeRepository.saveAllAndFlush(it) }
 		}
 	}
 
