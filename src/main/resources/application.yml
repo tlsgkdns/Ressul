@@ -1,7 +1,4 @@
 spring:
-  redis:
-    host: ${SPRING_REDIS_HOST}
-    port: ${SPRING_REDIS_PORT}
   datasource:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
@@ -38,15 +35,18 @@ oauth2:
   kakao:
     client_id: ${OAUTH_KAKAO_CLIENT_ID}
     redirect_url: ${OAUTH_KAKAO_REDIRECT_URL}
+    auth_server_base_url: ${OAUTH_KAKAO_AUTH_SERVER_BASE_URL}
+    resource_server_base_url: ${OAUTH_KAKAO_RESOURCE_SERVER_BASE_URL}
 
 ---
 spring:
   config:
     activate:
       on-profile: test
-  redis:
-    host: ${SPRING_REDIS_HOST}
-    port: ${SPRING_REDIS_PORT}
+  data:
+    redis:
+      host: ${SPRING_REDIS_HOST}
+      port: ${SPRING_REDIS_PORT}
   datasource:
     url: ${TEST_DATASOURCE_URL}
     username: ${TEST_DATASOURCE_USERNAME}
@@ -72,3 +72,5 @@ oauth2:
   kakao:
     client_id: ${OAUTH_KAKAO_CLIENT_ID}
     redirect_url: ${OAUTH_KAKAO_REDIRECT_URL}
+    auth_server_base_url: ${OAUTH_KAKAO_AUTH_SERVER_BASE_URL}
+    resource_server_base_url: ${OAUTH_KAKAO_RESOURCE_SERVER_BASE_URL}
