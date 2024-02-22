@@ -80,6 +80,7 @@ open class ResumePopularRedisService(
 					takeIf { updatedViews.isNotEmpty() }
 						?.run { onEach { it.views += recentlyViews[it.id!!]?.minus(updatedViews[it.id!!]!!)!! } }
 				}?.let { resumeRepository.saveAllAndFlush(it) }
+			viewsTemplate.opsForHash<Long,Long>().entries(updateViewsKey)
 		}
 	}
 
