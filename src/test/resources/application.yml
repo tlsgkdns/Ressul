@@ -1,0 +1,81 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
+        show_sql: true
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  data:
+    redis:
+      host: ${SPRING_REDIS_HOST}
+      port: ${SPRING_REDIS_PORT}
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        orm:
+          jdbc:
+            bind: trace
+
+auth:
+  jwt:
+    issuer: ${AUTH_JWT_ISSUER}
+    secret: ${AUTH_JWT_SECRET}
+    access_token_expiration_hour : ${AUTH_JWT_ACCESS_TOKEN_EXPIRATION_HOUR}
+oauth2:
+  kakao:
+    client_id: ${OAUTH_KAKAO_CLIENT_ID}
+    redirect_url: ${OAUTH_KAKAO_REDIRECT_URL}
+    auth_server_base_url: ${OAUTH_KAKAO_AUTH_SERVER_BASE_URL}
+    resource_server_base_url: ${OAUTH_KAKAO_RESOURCE_SERVER_BASE_URL}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  data:
+    redis:
+      host: ${SPRING_REDIS_HOST}
+      port: ${SPRING_REDIS_PORT}
+  datasource:
+    url: ${TEST_DATASOURCE_URL}
+    username: ${TEST_DATASOURCE_USERNAME}
+    password: ${TEST_DATASOURCE_PASSWORD}
+    driver-class-name: org.h2.Driver
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
+        show_sql: true
+    hibernate:
+      ddl-auto: create
+    open-in-view: false
+    database-platform: org.hibernate.dialect.H2Dialect
+auth:
+  jwt:
+    issuer: ${AUTH_JWT_ISSUER}
+    secret: ${AUTH_JWT_SECRET}
+    access_token_expiration_hour : ${AUTH_JWT_ACCESS_TOKEN_EXPIRATION_HOUR}
+oauth2:
+  kakao:
+    client_id: ${OAUTH_KAKAO_CLIENT_ID}
+    redirect_url: ${OAUTH_KAKAO_REDIRECT_URL}
+    auth_server_base_url: ${OAUTH_KAKAO_AUTH_SERVER_BASE_URL}
+    resource_server_base_url: ${OAUTH_KAKAO_RESOURCE_SERVER_BASE_URL}
+
+payment:
+  toss_payment:
+    url: ${TOSS_URL}
+    toss_secret_key: ${TOSS_SECRET_KEY}

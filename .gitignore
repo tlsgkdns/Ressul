@@ -12,6 +12,7 @@ build/
 .settings
 .springBeans
 .sts4-cache
+.env
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
@@ -37,3 +38,4 @@ out/
 
 ### Kotlin ###
 .kotlin
+/src/main/resources/.env
