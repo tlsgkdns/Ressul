@@ -72,7 +72,7 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
     testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.3")
     testImplementation("io.mockk:mockk:$mockkVersion")
-
+    testImplementation("com.h2database:h2:2.2.220")
     testImplementation("com.ninja-squad:springmockk:4.0.2")
     implementation("me.paulschwarz:spring-dotenv:4.0.0")
 }

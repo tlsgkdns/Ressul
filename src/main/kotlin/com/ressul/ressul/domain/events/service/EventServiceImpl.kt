@@ -15,6 +15,7 @@ import com.ressul.ressul.global.exception.ErrorCode
 import com.ressul.ressul.global.exception.ModelNotFoundException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 
 @Service
@@ -37,8 +38,6 @@ class EventServiceImpl(
         return eventRepository.save(eventCreateRequest.let { EventEntity(it.tutor, it.capacity) })
             .let { EventResponse.from(it) }
     }
-
-    @Transactional
     override fun participateEvent(eventId: Long, loginMember: LoginMember): ParticipantsResponse {
         while (!redisLockRepository.lock("Event", eventId))
         {

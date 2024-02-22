@@ -1,4 +1,4 @@
-package com.ressul.ressul.domain.events.controller
+package com.ressul.ressul.api.event.controller
 
 import com.ressul.ressul.api.oauth2login.Login
 import com.ressul.ressul.domain.events.dto.EventCreateRequest
@@ -6,8 +6,10 @@ import com.ressul.ressul.domain.events.dto.EventResponse
 import com.ressul.ressul.domain.events.dto.ParticipantsResponse
 import com.ressul.ressul.domain.events.service.EventService
 import com.ressul.ressul.domain.member.dto.LoginMember
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -37,8 +39,13 @@ class EventController(
     }
 
     @PostMapping()
-    fun createEvent(@RequestBody eventCreateDTO: EventCreateRequest): ResponseEntity<EventResponse>
+    fun createEvent(@Valid @RequestBody eventCreateDTO: EventCreateRequest,
+                    bindingResult: BindingResult): ResponseEntity<EventResponse>
     {
+        if(bindingResult.hasErrors())
+        {
+            throw IllegalArgumentException(bindingResult.fieldError?.defaultMessage ?: "")
+        }
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(eventService.createEvent(eventCreateDTO))
     }

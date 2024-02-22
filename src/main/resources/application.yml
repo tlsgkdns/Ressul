@@ -1,4 +1,11 @@
 spring:
+  profiles:
+    active: dev
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
   redis:
     host: ${SPRING_REDIS_HOST}
     port: ${SPRING_REDIS_PORT}
@@ -14,16 +21,56 @@ spring:
         use_sql_comments: true
         show_sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     open-in-view: false
 logging:
   level:
     org:
+      springframework:
+        orm:
+          jpa: debug
+        transaction: debug
       hibernate:
         SQL: debug
         orm:
           jdbc:
             bind: trace
+    root: info
+
+auth:
+  jwt:
+    issuer: ${AUTH_JWT_ISSUER}
+    secret: ${AUTH_JWT_SECRET}
+    access_token_expiration_hour : ${AUTH_JWT_ACCESS_TOKEN_EXPIRATION_HOUR}
+oauth2:
+  kakao:
+    client_id: ${OAUTH_KAKAO_CLIENT_ID}
+    redirect_url: ${OAUTH_KAKAO_REDIRECT_URL}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  redis:
+    host: ${SPRING_REDIS_HOST}
+    port: ${SPRING_REDIS_PORT}
+  datasource:
+    url: ${TEST_DATASOURCE_URL}
+    username: ${TEST_DATASOURCE_USERNAME}
+    password: ${TEST_DATASOURCE_PASSWORD}
+    driver-class-name: org.h2.Driver
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
+        show_sql: true
+    hibernate:
+      ddl-auto: create
+    open-in-view: false
+    database-platform: org.hibernate.dialect.H2Dialect
 auth:
   jwt:
     issuer: ${AUTH_JWT_ISSUER}
