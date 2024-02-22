@@ -11,6 +11,7 @@ enum class ErrorCode(val code: Long, val httpStatus: HttpStatus, val message: St
 
 	EVENT_NOT_FOUND(4001, HttpStatus.NOT_FOUND, "해당 Event가 없습니다."),
 	EVENT_IS_CLOSED(4002, HttpStatus.BAD_REQUEST, "해당 Event는 종료되었습니다."),
+	ALREADY_PARTICIPATED_EVENT(4003, HttpStatus.BAD_REQUEST, "이미 참여하신 Event입니다."),
 
 	VALIDATION(10001, HttpStatus.BAD_REQUEST, "Validation을 통과하지 못했습니다."),
 	MODEL_NOT_FOUND(10002, HttpStatus.BAD_REQUEST, "해당 Model을 찾지 못했습니다."),

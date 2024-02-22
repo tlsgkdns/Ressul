@@ -3,6 +3,7 @@ package com.ressul.ressul.domain.events.service
 import com.ressul.ressul.domain.events.dto.EventCreateRequest
 import com.ressul.ressul.domain.events.dto.EventResponse
 import com.ressul.ressul.domain.events.dto.ParticipantsResponse
+import com.ressul.ressul.domain.events.exception.AlreadyParticipatedEvent
 import com.ressul.ressul.domain.events.exception.EventIsClosedException
 import com.ressul.ressul.domain.events.model.EventEntity
 import com.ressul.ressul.domain.events.model.Participant
@@ -37,8 +38,6 @@ class EventServiceImpl(
         return eventRepository.save(eventCreateRequest.let { EventEntity(it.tutor, it.capacity) })
             .let { EventResponse.from(it) }
     }
-
-    @Transactional
     override fun participateEvent(eventId: Long, loginMember: LoginMember): ParticipantsResponse {
         while (!redisLockRepository.lock("Event", eventId))
         {
@@ -46,6 +45,8 @@ class EventServiceImpl(
         }
         try {
             val event = getExistEvent(eventId)
+            if(participantRepository.existsParticipantByEventIdAndMemberId(eventId, loginMember.id))
+                throw AlreadyParticipatedEvent(ErrorCode.ALREADY_PARTICIPATED_EVENT)
             if(!event.addParticipant()) throw EventIsClosedException(ErrorCode.EVENT_IS_CLOSED)
             eventRepository.save(event)
             return participantRepository.save(Participant(member = memberRepository.findByIdOrNull(loginMember.id), event = event))

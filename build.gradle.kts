@@ -73,8 +73,7 @@ dependencies {
     testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.3")
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
-    testImplementation("com.h2database:h2")
-
+    testImplementation("com.h2database:h2:2.2.220")
     testImplementation("com.ninja-squad:springmockk:4.0.2")
     implementation("me.paulschwarz:spring-dotenv:4.0.0")
 
