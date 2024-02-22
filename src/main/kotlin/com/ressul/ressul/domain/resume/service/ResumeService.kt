@@ -25,6 +25,7 @@ class ResumeService(
 			ErrorCode.MODEL_NOT_FOUND
 		)
 
+	@Transactional
 	fun createResume(dto: CreateResumeRequest, memberEntity: MemberEntity) =
 		ResumeEntity.of(dto, memberEntity)
 			.let { resumeRepository.save(it) }.toResponse()
@@ -56,6 +57,7 @@ class ResumeService(
 	fun getResumeById(resumeId: Long) =
 		findById(resumeId).toResponse()
 
+	@Transactional
 	fun getResumeListByIdList(idList: List<Long>) =
 		resumeRepository.findAllById(idList).map { it.toResponse() }
 }

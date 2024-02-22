@@ -5,6 +5,7 @@ data class ResumeResponse (
 	val title: String,
 	val nickname : String,
 	val certification : String,
+	val introduction: String,
 	val education : String,
 	val views : Long,
 )

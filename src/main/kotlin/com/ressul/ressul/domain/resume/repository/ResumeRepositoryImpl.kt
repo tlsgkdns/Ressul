@@ -24,5 +24,5 @@ class ResumeRepositoryImpl(
 
 
 	override fun findAllById(idList: List<Long>) =
-		jpaResumeRepository.findAllById(idList).toList()
+		jpaResumeRepository.findAllById(idList).sortedByDescending { it.id }
 }
