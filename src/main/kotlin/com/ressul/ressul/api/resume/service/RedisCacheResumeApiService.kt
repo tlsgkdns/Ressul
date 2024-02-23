@@ -41,16 +41,15 @@ class RedisCacheResumeApiService(
 			.let { resumeService.createResume(dto, it!!) }
 
 	fun searchResume(dto: SearchResumeRequest, keyword: String, page: Int) = run {
-		if (page == 1) {
-			popularKeywordService.incrementKeywordCount(keyword)
-			popularKeywordService.getPopularKeywordList()
-				.takeIf { it.find { entity -> entity.keyword == keyword } != null }
-				?.run { callServiceIfAbsentCachedData(keyword, page, dto) }
-		} else resumeService.searchResumeList(dto, keyword, page)
+		popularKeywordService.incrementKeywordCount(keyword)
+		popularKeywordService.getPopularKeywordList()
+			.takeIf { it.find { entity -> entity.keyword == keyword } != null }
+			?.run { callServiceIfAbsentCachedData(keyword, page, dto) }
+			?: resumeService.searchResumeList(dto, keyword, page)
 	}
 
 	private fun callServiceIfAbsentCachedData(keyword: String, page: Int, dto: SearchResumeRequest) =
-		popularKeywordRedisCacheService.getCachedData(keyword)
+		popularKeywordRedisCacheService.getCachedData(keyword + page)
 			?.let { resumeService.getResumeListByIdList(it) }
 			?: callServiceAndCacheData(keyword, page, dto)
 
@@ -58,7 +57,7 @@ class RedisCacheResumeApiService(
 		resumeService.searchResumeList(dto, keyword, page).also { resList ->
 			resList.map { it.id }
 				.let {
-					popularKeywordRedisCacheService.cacheData(PopularKeywordRedisModel(keyword, it.toString()))
+					popularKeywordRedisCacheService.cacheData(PopularKeywordRedisModel(keyword + page, it.toString()))
 				}
 		}
 
