@@ -133,7 +133,7 @@ class RessulEventServiceTests @Autowired constructor(
 ---
 
 ## 物足りない点
- * 私が使ったLettuceのSpin Lock方式はサーバーに負担をかける方式だ。 このプロジェクトを通じてRedisを初めて学んで、Redissonまで使うには時間がなかったので簡単なSpin Lock方式を使いましたが
+ * 私が使ったLettuceのSpin Lock方式はサーバーに負担をかける方式だ。 このプロジェクトを通じてRedisを初めて学んで、Redissonまで使うには時間がなかったので簡単なSpin Lock方式を使った
 もし、次に同時性問題を解決するとしたら、分散ロック方式を使ってみたい
 ---
 
